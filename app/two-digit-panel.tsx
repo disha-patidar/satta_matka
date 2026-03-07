@@ -1,0 +1,151 @@
+import React,{useState} from "react";
+import {View,Text,TextInput,TouchableOpacity,StyleSheet,ScrollView} from "react-native";
+import {Ionicons} from "@expo/vector-icons";
+import {useRouter,useLocalSearchParams} from "expo-router";
+
+export default function TwoDigitPanel(){
+
+const router = useRouter();
+const {gameName} = useLocalSearchParams();
+
+const [digit,setDigit] = useState("");
+const [amount,setAmount] = useState("");
+
+const [bids,setBids] = useState<any[]>([]);
+
+const addBid=()=>{
+
+if(!digit || !amount) return;
+
+const newBid={
+digit,
+amount,
+gameType:"Two Digit Panel"
+};
+
+setBids([...bids,newBid]);
+
+setDigit("");
+setAmount("");
+
+};
+
+return(
+
+<ScrollView style={styles.container}>
+
+<View style={styles.header}>
+
+<TouchableOpacity onPress={()=>router.back()}>
+<Ionicons name="arrow-back" size={24}/>
+</TouchableOpacity>
+
+<Text style={styles.headerTitle}>
+{gameName} TWO DIGIT PANEL
+</Text>
+
+<View style={styles.wallet}>
+<Ionicons name="wallet-outline" size={22}/>
+<Text style={{marginLeft:5}}>5</Text>
+</View>
+
+</View>
+
+<Text style={styles.label}>Enter Single Digit:</Text>
+
+<TextInput
+style={styles.input}
+placeholder="Bid Digits"
+keyboardType="numeric"
+value={digit}
+onChangeText={setDigit}
+/>
+
+<Text style={styles.label}>Enter Points:</Text>
+
+<TextInput
+style={styles.input}
+placeholder="Enter Amount"
+keyboardType="numeric"
+value={amount}
+onChangeText={setAmount}
+/>
+
+<TouchableOpacity style={styles.addBtn} onPress={addBid}>
+<Text style={styles.addText}>ADD BID</Text>
+</TouchableOpacity>
+
+<View style={styles.tableHeader}>
+<Text>Digit</Text>
+<Text>Amount</Text>
+<Text>Game Type</Text>
+</View>
+
+{bids.map((item,index)=>(
+<View key={index} style={styles.row}>
+<Text>{item.digit}</Text>
+<Text>{item.amount}</Text>
+<Text>{item.gameType}</Text>
+</View>
+))}
+
+</ScrollView>
+
+)
+
+}
+
+const styles=StyleSheet.create({
+
+container:{flex:1,backgroundColor:"#f2f2f2"},
+
+header:{
+flexDirection:"row",
+justifyContent:"space-between",
+alignItems:"center",
+padding:15,
+backgroundColor:"white"
+},
+
+headerTitle:{fontSize:18,fontWeight:"bold"},
+
+wallet:{flexDirection:"row",alignItems:"center"},
+
+label:{marginTop:15,marginHorizontal:15,fontSize:16},
+
+input:{
+borderWidth:1,
+borderColor:"#ccc",
+marginHorizontal:15,
+marginTop:5,
+padding:12,
+borderRadius:25,
+backgroundColor:"white"
+},
+
+addBtn:{
+backgroundColor:"#f5a623",
+margin:15,
+padding:15,
+borderRadius:10,
+alignItems:"center"
+},
+
+addText:{color:"white",fontWeight:"bold"},
+
+tableHeader:{
+flexDirection:"row",
+justifyContent:"space-around",
+padding:10,
+borderBottomWidth:1
+},
+
+row:{
+flexDirection:"row",
+justifyContent:"space-around",
+padding:12,
+borderBottomWidth:1,
+borderColor:"#eee"
+}
+
+});
